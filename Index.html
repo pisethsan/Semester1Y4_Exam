@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Full Web & OOP Master Quiz</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --success-bg: #dcfce7;
+      --success-border: #22c55e;
+      --success-text: #15803d;
+      --error-bg: #fee2e2;
+      --error-border: #ef4444;
+      --error-text: #b91c1c;
+      --code-bg: #0f172a;
+      --radius: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Khmer OS Siemreap", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--card-bg);
+      padding: 20px 24px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      margin-bottom: 24px;
+      position: sticky;
+      top: 16px;
+      z-index: 10;
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .score-badge {
+      background: #eff6ff;
+      color: var(--primary);
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      border: 1px solid #bfdbfe;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filters, .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .btn:hover {
+      background: #f1f5f9;
+    }
+
+    .btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .btn-submit {
+      background: #10b981;
+      color: #fff;
+      border-color: #059669;
+    }
+    .btn-submit:hover {
+      background: #059669;
+    }
+
+    .btn-show {
+      background: #6366f1;
+      color: #fff;
+      border-color: #4f46e5;
+    }
+    .btn-show:hover {
+      background: #4f46e5;
+    }
+
+    .btn-reset {
+      background: #ef4444;
+      color: #fff;
+      border-color: #dc2626;
+    }
+    .btn-reset:hover {
+      background: #dc2626;
+    }
+
+    .question-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      white-space: pre-line;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: center;
+      text-align: left;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .option-btn.selected {
+      background: #e0e7ff;
+      border-color: #818cf8;
+      font-weight: 600;
+      color: #3730a3;
+    }
+
+    .option-btn.correct {
+      background: var(--success-bg) !important;
+      border-color: var(--success-border) !important;
+      color: var(--success-text) !important;
+      font-weight: 700;
+    }
+
+    .option-btn.incorrect {
+      background: var(--error-bg) !important;
+      border-color: var(--error-border) !important;
+      color: var(--error-text) !important;
+    }
+
+    .interactive-box {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 12px;
+      margin-bottom: 16px;
+    }
+
+    .mult-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 10px;
+      background: #fff;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    .mult-table td, .mult-table th {
+      border: 1px solid #cbd5e1;
+      padding: 5px;
+    }
+
+    /* Syntax Highlighting Container & Colors */
+    .code-container {
+      position: relative;
+      background: var(--code-bg);
+      border-radius: 8px;
+      border: 1px solid #334155;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .code-header {
+      background: #1e293b;
+      padding: 6px 14px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #334155;
+    }
+
+    pre code {
+      display: block;
+      background: transparent;
+      color: #e2e8f0;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, "Fira Code", Menlo, Monaco, Consolas, monospace;
+      font-size: 0.86rem;
+      line-height: 1.55;
+      tab-size: 4;
+    }
+
+    /* Tokens */
+    .syn-tag { color: #f43f5e; font-weight: 600; }        /* HTML Tag (<tag>) */
+    .syn-attr { color: #38bdf8; }                         /* HTML Attribute */
+    .syn-str { color: #a3e635; }                          /* Strings ("...") */
+    .syn-kw { color: #c084fc; font-weight: 600; }         /* Keywords (class, public, var, let) */
+    .syn-fn { color: #60a5fa; }                           /* Function / Method names */
+    .syn-type { color: #38bdf8; }                         /* Data Types (int, String, double) */
+    .syn-com { color: #94a3b8; font-style: italic; }      /* Comments (// ...) */
+    .syn-num { color: #fb923c; }                          /* Numbers */
+    .syn-ann { color: #fbbf24; }                          /* Annotations (@Override) */
+    .syn-op { color: #e2e8f0; }                           /* Operators */
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal {
+      background: #fff;
+      width: 100%;
+      max-width: 480px;
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+
+    .modal h2 {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .modal-stats {
+      margin: 16px 0;
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 0.95rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .modal-stats span {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-top">
+        <h1>Worksheet & OOP Master Quiz</h1>
+        <div class="score-badge" id="scoreDisplay">Progress: 0 / 125 answered</div>
+      </div>
+      <div class="toolbar">
+        <div class="filters">
+          <button class="btn active" data-filter="all" onclick="setCategory('all', this)">All (125)</button>
+          <button class="btn" data-filter="HTML" onclick="setCategory('HTML', this)">HTML (65)</button>
+          <button class="btn" data-filter="JavaScript" onclick="setCategory('JavaScript', this)">JavaScript (40)</button>
+          <button class="btn" data-filter="JS-Practice" onclick="setCategory('JS-Practice', this)">JS Lab</button>
+          <button class="btn" data-filter="OOP-TF" onclick="setCategory('OOP-TF', this)">OOP T/F (10)</button>
+          <button class="btn" data-filter="OOP-MCQ" onclick="setCategory('OOP-MCQ', this)">OOP MCQ (10)</button>
+          <button class="btn" data-filter="OOP-Code" onclick="setCategory('OOP-Code', this)">OOP Java Code</button>
+        </div>
+        <div class="actions">
+          <button class="btn btn-submit" onclick="submitQuiz()">Submit Quiz</button>
+          <button class="btn btn-show" onclick="showAllAnswers()">Show All Answers</button>
+          <button class="btn btn-reset" onclick="resetQuiz()">Reset</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="question-list" id="quizContainer"></div>
+
+    <!-- JS Lab Section -->
+    <div id="jsLabSection" class="hidden" style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px;">
+      
+      <!-- Task 1: Checkbox Calculation -->
+      <div class="card">
+        <div class="card-meta"><span>JavaScript Practice Lab</span><span>Task 1</span></div>
+        <div class="card-title">Interactive Calculation: Programming Course Selection</div>
+        
+        <div class="interactive-box">
+          <p style="margin-bottom: 8px;"><strong>The price of Programming:</strong></p>
+          <label><input type="checkbox" value="2000" name="myCourseChoice"> $2000 for Javascript Programming</label><br>
+          <label><input type="checkbox" value="1900" name="myCourseChoice"> $1900 for C Programming</label><br>
+          <label><input type="checkbox" value="1800" name="myCourseChoice"> $1800 for CSS Programming</label><br>
+          <label><input type="checkbox" value="1700" name="myCourseChoice"> $1700 for HTML Programming</label><br><br>
+          <button class="btn active" onclick="calculateSelectedCourses()">Calculate Total</button>
+          <div id="calcResult" style="margin-top: 10px; font-weight: 600; color: var(--primary);"></div>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">HTML & JavaScript Highlighted Source</div>
+          <pre><code><span class="syn-tag">&lt;p&gt;</span>The price of Programming:<span class="syn-tag">&lt;/p&gt;</span>
+<span class="syn-tag">&lt;p&gt;</span>
+  <span class="syn-tag">&lt;input</span> <span class="syn-attr">type</span>=<span class="syn-str">"checkbox"</span> <span class="syn-attr">value</span>=<span class="syn-str">"2000"</span> <span class="syn-attr">name</span>=<span class="syn-str">"myChoice"</span><span class="syn-tag">&gt;</span> $2000 for Javascript Programming<span class="syn-tag">&lt;br&gt;</span>
+  <span class="syn-tag">&lt;input</span> <span class="syn-attr">type</span>=<span class="syn-str">"checkbox"</span> <span class="syn-attr">value</span>=<span class="syn-str">"1900"</span> <span class="syn-attr">name</span>=<span class="syn-str">"myChoice"</span><span class="syn-tag">&gt;</span> $1900 for C Programming<span class="syn-tag">&lt;br&gt;</span>
+  <span class="syn-tag">&lt;input</span> <span class="syn-attr">type</span>=<span class="syn-str">"checkbox"</span> <span class="syn-attr">value</span>=<span class="syn-str">"1800"</span> <span class="syn-attr">name</span>=<span class="syn-str">"myChoice"</span><span class="syn-tag">&gt;</span> $1800 for CSS Programming<span class="syn-tag">&lt;br&gt;</span>
+  <span class="syn-tag">&lt;input</span> <span class="syn-attr">type</span>=<span class="syn-str">"checkbox"</span> <span class="syn-attr">value</span>=<span class="syn-str">"1700"</span> <span class="syn-attr">name</span>=<span class="syn-str">"myChoice"</span><span class="syn-tag">&gt;</span> $1700 for HTML Programming<span class="syn-tag">&lt;br&gt;</span>
+  <span class="syn-tag">&lt;input</span> <span class="syn-attr">type</span>=<span class="syn-str">"button"</span> <span class="syn-attr">value</span>=<span class="syn-str">"Total Price"</span> <span class="syn-attr">onclick</span>=<span class="syn-str">"dataCalculation()"</span><span class="syn-tag">&gt;</span>
+<span class="syn-tag">&lt;/p&gt;</span>
+
+<span class="syn-tag">&lt;script&gt;</span>
+<span class="syn-kw">function</span> <span class="syn-fn">dataCalculation</span>() {
+  <span class="syn-kw">var</span> sum = <span class="syn-num">0</span>;
+  <span class="syn-kw">var</span> obj = document.<span class="syn-fn">getElementsByName</span>(<span class="syn-str">"myChoice"</span>);
+  <span class="syn-kw">for</span> (<span class="syn-kw">var</span> i = <span class="syn-num">0</span>; i &lt; obj.length; i++) {
+    <span class="syn-kw">if</span> (!obj[i].checked) <span class="syn-kw">continue</span>;
+    sum += <span class="syn-fn">parseFloat</span>(obj[i].value);
+  }
+  <span class="syn-fn">alert</span>(<span class="syn-str">"Total Price is: "</span> + sum + <span class="syn-str">"$"</span>);
+}
+<span class="syn-tag">&lt;/script&gt;</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Task 2: Nested Loops Table -->
+      <div class="card">
+        <div class="card-meta"><span>JavaScript Practice Lab</span><span>Task 2</span></div>
+        <div class="card-title">Nested Loop: 10x10 Multiplication Table</div>
+        
+        <div class="interactive-box">
+          <button class="btn active" onclick="generateTable()">Generate 10x10 Table</button>
+          <div id="multTableContainer" style="overflow-x: auto;"></div>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">JavaScript Nested Loop Highlighted Source</div>
+          <pre><code><span class="syn-tag">&lt;script&gt;</span>
+document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;table border=1&gt;"</span>);
+<span class="syn-kw">for</span> (<span class="syn-kw">var</span> i = <span class="syn-num">1</span>; i &lt;= <span class="syn-num">10</span>; i++) {
+  document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;tr&gt;"</span>);
+  <span class="syn-kw">for</span> (<span class="syn-kw">var</span> j = <span class="syn-num">1</span>; j &lt;= <span class="syn-num">10</span>; j++) {
+    document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;td&gt;"</span>);
+    document.<span class="syn-fn">write</span>(i * j);
+    document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/td&gt;"</span>);
+  }
+  document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/tr&gt;"</span>);
+}
+document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/table&gt;"</span>);
+<span class="syn-tag">&lt;/script&gt;</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- OOP Theory & Code Section -->
+    <div id="oopCodeSection" class="hidden" style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px;">
+      
+      <!-- Theory 1 -->
+      <div class="card">
+        <div class="card-meta"><span>OOP Theory</span><span>សំណួរទ្រឹស្ដី ១</span></div>
+        <div class="card-title">១. ដូចម្តេចដែលហៅថាការសរសេរកម្មវិធីបែប OOP?</div>
+        <p style="margin-bottom: 12px;">OOP (Object-Oriented Programming) គឺជារបៀបសរសេរកម្មវិធីដែលផ្អែកលើ Class និង Object ដើម្បីរៀបចំទិន្នន័យ និងមុខងារឱ្យមានរបៀបរៀបរយ ងាយស្រួលប្រើប្រាស់ និងកែប្រែ[cite: 16]។</p>
+        <p><strong>គោលគំនិតសំខាន់ទាំង ៤៖</strong></p>
+        <ul style="margin-left: 20px; margin-top: 6px;">
+          <li><strong>Encapsulation:</strong> ការការពារទិន្នន័យដោយប្រើ Access Modifiers (private, protected, public)[cite: 16]។</li>
+          <li><strong>Inheritance:</strong> អនុញ្ញាតឱ្យ Subclass ទទួលយក attributes និង methods ពី Superclass[cite: 16]។</li>
+          <li><strong>Polymorphism:</strong> Method អាចមានឈ្មោះដូចគ្នា ប៉ុន្តែមានដំណើរការ/អាកប្បកិរិយាខុសគ្នា[cite: 16]។</li>
+          <li><strong>Abstraction:</strong> ការលាក់បាំងភាពស្មុគស្មាញខាងក្នុង និងបង្ហាញតែមុខងារសំខាន់ៗ[cite: 16]។</li>
+        </ul>
+      </div>
+
+      <!-- Theory 2 -->
+      <div class="card">
+        <div class="card-meta"><span>OOP Theory</span><span>សំណួរទ្រឹស្ដី ២</span></div>
+        <div class="card-title">២. ដូចម្តេចដែលហៅថា Constructor? ហើយ Constructor មានប៉ុន្មានអ្វីខ្លះ?</div>
+        <p>Constructor គឺជា Method ពិសេសមួយដែលត្រូវបានហៅដោយស្វ័យប្រវត្តិនៅពេលបង្កើត Object ថ្មី ដើម្បីកំណត់តម្លៃដំបូងឱ្យ Attribute[cite: 16]។</p>
+        <p style="margin-top: 8px;"><strong>Constructor ចែកចេញជា ៣ ប្រភេទសំខាន់ៗ៖</strong></p>
+        <ul style="margin-left: 20px; margin-top: 6px;">
+          <li><strong>Default Constructor:</strong> Constructor ដែលមិនមាន parameter សម្រាប់កំណត់តម្លៃដើមស្រាប់[cite: 16]។</li>
+          <li><strong>Parameterized Constructor:</strong> Constructor ដែលមាន parameter ដើម្បីអនុញ្ញាតឱ្យយើងបញ្ជូនតម្លៃខុសៗគ្នាទៅឱ្យ instance variables ពេល instantiate object ថ្មី[cite: 16]។</li>
+          <li><strong>Copy Constructor:</strong> Constructor ដែលទទួល object នៃ class នោះជា parameter ដើម្បីចម្លងទិន្នន័យពី object មួយទៅ object ថ្មីមួយទៀត[cite: 16]។</li>
+        </ul>
+      </div>
+
+      <!-- Theory 3 with syntax color -->
+      <div class="card">
+        <div class="card-meta"><span>OOP Theory</span><span>សំណួរទ្រឹស្ដី ៣</span></div>
+        <div class="card-title">៣. ដូចម្តេចដែលហៅថា Class? ចូរប្រាប់ពីការបង្កើត Class និងលើកជាឧទាហរណ៍ (Java)?</div>
+        <p>Class គឺជាពុម្ពគំរូ (Blueprint ឬ Template) សម្រាប់បង្កើត Objects ដែលកំណត់នូវលក្ខណៈសម្បត្តិ (Attributes/Fields) និងសកម្មភាព (Methods) ដែល Object នៃ Class នោះត្រូវមាន[cite: 16]។</p>
+        <p style="margin-top: 8px;"><strong>របៀបនៃការបង្កើត Class:</strong> ការបង្កើត Class ក្នុង Java គឺប្រើប្រាស់ keyword <code>class</code> តាមដោយឈ្មោះ Class រួចកំណត់នូវ attributes, constructor, និង methods នៅខាងក្នុង curly braces <code>{}</code>[cite: 16]។</p>
+        
+        <div class="code-container">
+          <div class="code-header">Java Example — Class Car</div>
+          <pre><code><span class="syn-kw">public class</span> <span class="syn-type">Car</span> {
+    <span class="syn-kw">private</span> <span class="syn-type">String</span> brand;
+    <span class="syn-kw">private</span> <span class="syn-type">String</span> color;
+
+    <span class="syn-com">// Constructor</span>
+    <span class="syn-kw">public</span> <span class="syn-fn">Car</span>(<span class="syn-type">String</span> brand, <span class="syn-type">String</span> color) {
+        <span class="syn-kw">this</span>.brand = brand;
+        <span class="syn-kw">this</span>.color = color;
+    }
+
+    <span class="syn-com">// Method</span>
+    <span class="syn-kw">public void</span> <span class="syn-fn">drive</span>() {
+        <span class="syn-type">System</span>.out.<span class="syn-fn">println</span>(<span class="syn-kw">this</span>.brand + <span class="syn-str">" ("</span> + <span class="syn-kw">this</span>.color + <span class="syn-str">") កំពុងបើកបរ..."</span>);
+    }
+
+    <span class="syn-kw">public static void</span> <span class="syn-fn">main</span>(<span class="syn-type">String</span>[] args) {
+        <span class="syn-type">Car</span> myCar = <span class="syn-kw">new</span> <span class="syn-fn">Car</span>(<span class="syn-str">"Toyota"</span>, <span class="syn-str">"ស"</span>);
+        myCar.<span class="syn-fn">drive</span>();
+    }
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- Full Java Implementation with syntax color -->
+      <div class="card">
+        <div class="card-meta"><span>Java Complete Implementation</span><span>Class Hierarchy Code</span></div>
+        <div class="card-title">Full Java Code (Person, Employee, Student, Lecturer, Subject & Main)</div>
+        
+        <div class="code-container">
+          <div class="code-header">Java Syntax Highlighting</div>
+          <pre><code><span class="syn-kw">import</span> java.util.<span class="syn-type">ArrayList</span>;
+<span class="syn-kw">import</span> java.util.<span class="syn-type">List</span>;
+
+<span class="syn-com">// 1. Class Person</span>
+<span class="syn-kw">class</span> <span class="syn-type">Person</span> {
+    <span class="syn-kw">protected</span> <span class="syn-type">String</span> name;
+    <span class="syn-kw">protected int</span> age;
+    <span class="syn-kw">protected</span> <span class="syn-type">String</span> gender;
+
+    <span class="syn-kw">public</span> <span class="syn-fn">Person</span>(<span class="syn-type">String</span> name, <span class="syn-type">int</span> age, <span class="syn-type">String</span> gender) {
+        <span class="syn-kw">this</span>.name = name;
+        <span class="syn-kw">this</span>.age = age;
+        <span class="syn-kw">this</span>.gender = gender;
+    }
+
+    <span class="syn-kw">public void</span> <span class="syn-fn">info</span>() {
+        <span class="syn-type">System</span>.out.<span class="syn-fn">println</span>(<span class="syn-str">"Name: "</span> + name + <span class="syn-str">", Age: "</span> + age + <span class="syn-str">", Gender: "</span> + gender);
+    }
+}
+
+<span class="syn-com">// 2. Employee inheritance from Person</span>
+<span class="syn-kw">class</span> <span class="syn-type">Employee</span> <span class="syn-kw">extends</span> <span class="syn-type">Person</span> {
+    <span class="syn-kw">protected</span> <span class="syn-type">String</span> employee_id;
+    <span class="syn-kw">protected</span> <span class="syn-type">String</span> position;
+    <span class="syn-kw">protected double</span> salary;
+
+    <span class="syn-kw">public</span> <span class="syn-fn">Employee</span>(<span class="syn-type">String</span> name, <span class="syn-type">int</span> age, <span class="syn-type">String</span> gender, <span class="syn-type">String</span> employee_id, <span class="syn-type">String</span> position, <span class="syn-type">double</span> salary) {
+        <span class="syn-kw">super</span>(name, age, gender);
+        <span class="syn-kw">this</span>.employee_id = employee_id;
+        <span class="syn-kw">this</span>.position = position;
+        <span class="syn-kw">this</span>.salary = salary;
+    }
+
+    <span class="syn-ann">@Override</span>
+    <span class="syn-kw">public void</span> <span class="syn-fn">info</span>() {
+        <span class="syn-kw">super</span>.<span class="syn-fn">info</span>();
+        <span class="syn-type">System</span>.out.<span class="syn-fn">println</span>(<span class="syn-str">"Employee ID: "</span> + employee_id + <span class="syn-str">", Position: "</span> + position + <span class="syn-str">", Salary: $"</span> + <span class="syn-type">String</span>.<span class="syn-fn">format</span>(<span class="syn-str">"%.2f"</span>, salary));
+    }
+}
+
+<span class="syn-com">// 3. Student inheritance from Person</span>
+<span class="syn-kw">class</span> <span class="syn-type">Student</span> <span class="syn-kw">extends</span> <span class="syn-type">Person</span> {
+    <span class="syn-kw">private</span> <span class="syn-type">String</span> student_id;
+    <span class="syn-kw">private</span> <span class="syn-type">String</span> major;
+    <span class="syn-kw">private</span> <span class="syn-type">List</span>&lt;<span class="syn-type">Double</span>&gt; scores;
+
+    <span class="syn-kw">public</span> <span class="syn-fn">Student</span>(<span class="syn-type">String</span> name, <span class="syn-type">int</span> age, <span class="syn-type">String</span> gender, <span class="syn-type">String</span> student_id, <span class="syn-type">String</span> major) {
+        <span class="syn-kw">super</span>(name, age, gender);
+        <span class="syn-kw">this</span>.student_id = student_id;
+        <span class="syn-kw">this</span>.major = major;
+        <span class="syn-kw">this</span>.scores = <span class="syn-kw">new</span> <span class="syn-type">ArrayList</span>&lt;&gt;();
+    }
+
+    <span class="syn-kw">public void</span> <span class="syn-fn">add_score</span>(<span class="syn-type">double</span> score) {
+        <span class="syn-kw">this</span>.scores.<span class="syn-fn">add</span>(score);
+    }
+
+    <span class="syn-ann">@Override</span>
+    <span class="syn-kw">public void</span> <span class="syn-fn">info</span>() {
+        <span class="syn-kw">super</span>.<span class="syn-fn">info</span>();
+        <span class="syn-type">System</span>.out.<span class="syn-fn">println</span>(<span class="syn-str">"Student ID: "</span> + student_id + <span class="syn-str">", Major: "</span> + major + <span class="syn-str">", Scores: "</span> + scores);
+    }
+}
+
+<span class="syn-com">// 4. Lecturer inheritance from Employee</span>
+<span class="syn-kw">class</span> <span class="syn-type">Lecturer</span> <span class="syn-kw">extends</span> <span class="syn-type">Employee</span> {
+    <span class="syn-kw">protected</span> <span class="syn-type">String</span> lecturer_id;
+    <span class="syn-kw">protected</span> <span class="syn-type">String</span> department;
+    <span class="syn-kw">protected</span> <span class="syn-type">List</span>&lt;<span class="syn-type">String</span>&gt; subjects;
+
+    <span class="syn-kw">public</span> <span class="syn-fn">Lecturer</span>(<span class="syn-type">String</span> name, <span class="syn-type">int</span> age, <span class="syn-type">String</span> gender, <span class="syn-type">String</span> employee_id, <span class="syn-type">String</span> position, <span class="syn-type">double</span> salary,
+                    <span class="syn-type">String</span> lecturer_id, <span class="syn-type">String</span> department) {
+        <span class="syn-kw">super</span>(name, age, gender, employee_id, position, salary);
+        <span class="syn-kw">this</span>.lecturer_id = lecturer_id;
+        <span class="syn-kw">this</span>.department = department;
+        <span class="syn-kw">this</span>.subjects = <span class="syn-kw">new</span> <span class="syn-type">ArrayList</span>&lt;&gt;();
+    }
+
+    <span class="syn-kw">public void</span> <span class="syn-fn">add_subject</span>(<span class="syn-type">String</span> subject_name) {
+        <span class="syn-kw">this</span>.subjects.<span class="syn-fn">add</span>(subject_name);
+    }
+
+    <span class="syn-ann">@Override</span>
+    <span class="syn-kw">public void</span> <span class="syn-fn">info</span>() {
+        <span class="syn-kw">super</span>.<span class="syn-fn">info</span>();
+        <span class="syn-type">System</span>.out.<span class="syn-fn">println</span>(<span class="syn-str">"Lecturer ID: "</span> + lecturer_id + <span class="syn-str">", Department: "</span> + department + <span class="syn-str">", Subjects: "</span> + subjects);
+    }
+}
+
+<span class="syn-com">// 5. Subject inheritance from Lecturer</span>
+<span class="syn-kw">class</span> <span class="syn-type">Subject</span> <span class="syn-kw">extends</span> <span class="syn-type">Lecturer</span> {
+    <span class="syn-kw">private</span> <span class="syn-type">String</span> subject_id;
+    <span class="syn-kw">private</span> <span class="syn-type">String</span> subject_name;
+    <span class="syn-kw">private int</span> credit;
+
+    <span class="syn-kw">public</span> <span class="syn-fn">Subject</span>(<span class="syn-type">String</span> name, <span class="syn-type">int</span> age, <span class="syn-type">String</span> gender, <span class="syn-type">String</span> employee_id, <span class="syn-type">String</span> position, <span class="syn-type">double</span> salary,
+                   <span class="syn-type">String</span> lecturer_id, <span class="syn-type">String</span> department, <span class="syn-type">String</span> subject_id, <span class="syn-type">String</span> subject_name, <span class="syn-type">int</span> credit) {
+        <span class="syn-kw">super</span>(name, age, gender, employee_id, position, salary, lecturer_id, department);
+        <span class="syn-kw">this</span>.subject_id = subject_id;
+        <span class="syn-kw">this</span>.subject_name = subject_name;
+        <span class="syn-kw">this</span>.credit = credit;
+    }
+
+    <span class="syn-ann">@Override</span>
+    <span class="syn-kw">public void</span> <span class="syn-fn">info</span>() {
+        <span class="syn-kw">super</span>.<span class="syn-fn">info</span>();
+        <span class="syn-type">System</span>.out.<span class="syn-fn">println</span>(<span class="syn-str">"Subject ID: "</span> + subject_id + <span class="syn-str">", Subject Name: "</span> + subject_name + <span class="syn-str">", Credit: "</span> + credit);
+    }
+}
+
+<span class="syn-kw">public class</span> <span class="syn-type">Main</span> {
+    <span class="syn-kw">public static void</span> <span class="syn-fn">main</span>(<span class="syn-type">String</span>[] args) {
+        <span class="syn-type">System</span>.out.<span class="syn-fn">println</span>(<span class="syn-str">"===== 1. Person Test ====="</span>);
+        <span class="syn-type">Person</span> person = <span class="syn-kw">new</span> <span class="syn-fn">Person</span>(<span class="syn-str">"Sokha"</span>, <span class="syn-num">30</span>, <span class="syn-str">"Male"</span>);
+        person.<span class="syn-fn">info</span>();
+
+        <span class="syn-type">System</span>.out.<span class="syn-fn">println</span>(<span class="syn-str">"\n===== 2. Employee Test ====="</span>);
+        <span class="syn-type">Employee</span> emp = <span class="syn-kw">new</span> <span class="syn-fn">Employee</span>(<span class="syn-str">"Bopha"</span>, <span class="syn-num">28</span>, <span class="syn-str">"Female"</span>, <span class="syn-str">"EMP001"</span>, <span class="syn-str">"Accountant"</span>, <span class="syn-num">650.0</span>);
+        emp.<span class="syn-fn">info</span>();
+
+        <span class="syn-type">System</span>.out.<span class="syn-fn">println</span>(<span class="syn-str">"\n===== 3. Student Test ====="</span>);
+        <span class="syn-type">Student</span> std = <span class="syn-kw">new</span> <span class="syn-fn">Student</span>(<span class="syn-str">"Dara"</span>, <span class="syn-num">20</span>, <span class="syn-str">"Male"</span>, <span class="syn-str">"STD101"</span>, <span class="syn-str">"Computer Science"</span>);
+        std.<span class="syn-fn">add_score</span>(<span class="syn-num">85.5</span>);
+        std.<span class="syn-fn">add_score</span>(<span class="syn-num">92.0</span>);
+        std.<span class="syn-fn">add_score</span>(<span class="syn-num">78.5</span>);
+        std.<span class="syn-fn">info</span>();
+
+        <span class="syn-type">System</span>.out.<span class="syn-fn">println</span>(<span class="syn-str">"\n===== 4. Lecturer Test ====="</span>);
+        <span class="syn-type">Lecturer</span> lec = <span class="syn-kw">new</span> <span class="syn-fn">Lecturer</span>(<span class="syn-str">"Dr. Chan"</span>, <span class="syn-num">45</span>, <span class="syn-str">"Male"</span>, <span class="syn-str">"EMP099"</span>, <span class="syn-str">"Senior Lecturer"</span>, <span class="syn-num">1500.0</span>, <span class="syn-str">"LEC01"</span>, <span class="syn-str">"Information Technology"</span>);
+        lec.<span class="syn-fn">add_subject</span>(<span class="syn-str">"Java Programming"</span>);
+        lec.<span class="syn-fn">add_subject</span>(<span class="syn-str">"Object-Oriented Analysis"</span>);
+        lec.<span class="syn-fn">info</span>();
+
+        <span class="syn-type">System</span>.out.<span class="syn-fn">println</span>(<span class="syn-str">"\n===== 5. Subject Test ====="</span>);
+        <span class="syn-type">Subject</span> subj = <span class="syn-kw">new</span> <span class="syn-fn">Subject</span>(<span class="syn-str">"Dr. Chan"</span>, <span class="syn-num">45</span>, <span class="syn-str">"Male"</span>, <span class="syn-str">"EMP099"</span>, <span class="syn-str">"Senior Lecturer"</span>, <span class="syn-num">1500.0</span>,
+                                   <span class="syn-str">"LEC01"</span>, <span class="syn-str">"Information Technology"</span>, <span class="syn-str">"CS201"</span>, <span class="syn-str">"OOP with Java"</span>, <span class="syn-num">3</span>);
+        subj.<span class="syn-fn">info</span>();
+    }
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result Modal -->
+  <div id="resultModal" class="modal-backdrop hidden">
+    <div class="modal">
+      <h2>Quiz Results</h2>
+      <div class="modal-stats">
+        <div>Total Questions: <span id="mTotal">125</span></div>
+        <div>Answered: <span id="mAnswered">0</span></div>
+        <div>Unanswered: <span id="mUnanswered">0</span></div>
+        <div>Correct Answers: <span id="mCorrect" style="color: var(--success-text)">0</span></div>
+        <div>Score Percentage: <span id="mScore">0%</span></div>
+      </div>
+      <button class="btn active" style="width: 100%;" onclick="closeModal()">Review Answers</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      // --- HTML (1 to 65) ---
+      { cat: "HTML", q: "1. HTML stands for:", opts: ["A. HyperText Markup Language", "B. HighText Machine Language", "C. Hyper Transfer Markup Language", "D. HyperText Markdown Language"], ans: 0 },
+      { cat: "HTML", q: "2. Which of the following is used to create a webpage?", opts: ["A. MS Word", "B. HTML", "C. Excel", "D. Photoshop"], ans: 1 },
+      { cat: "HTML", q: "3. What is the purpose of HTML?", opts: ["A. To design web pages", "B. To store data", "C. To style text", "D. To program servers"], ans: 0 },
+      { cat: "HTML", q: "4. HTML files are saved with which extension?", opts: ["A. .doc", "B. .html", "C. .pdf", "D. .txt"], ans: 1 },
+      { cat: "HTML", q: "5. Which of these can open an HTML file?", opts: ["A. Web browser", "B. Notepad only", "C. Excel", "D. Word"], ans: 0 },
+      { cat: "HTML", q: "6. The <html> tag represents:", opts: ["A. The head of a webpage", "B. The entire HTML document", "C. The main content", "D. A paragraph"], ans: 1 },
+      { cat: "HTML", q: "7. Which tag is used to display content in the browser window?", opts: ["A. <body>", "B. <title>", "C. <html>", "D. <meta>"], ans: 0 },
+      { cat: "HTML", q: "8. What tag is used for a paragraph?", opts: ["A. <pg>", "B. <para>", "C. <text>", "D. <p>"], ans: 3 },
+      { cat: "HTML", q: "9. The <head> tag is used for:", opts: ["A. Metadata", "B. Page title", "C. Scripts", "D. All of the above"], ans: 3 },
+      { cat: "HTML", q: "10. Which tag creates a title on the browser tab?", opts: ["A. <header>", "B. <title>", "C. <h1>", "D. <meta>"], ans: 1 },
+      { cat: "HTML", q: "11. An HTML element is made up of:", opts: ["A. Tags and attributes", "B. Start tag, content, end tag", "C. Only tags", "D. Text only"], ans: 1 },
+      { cat: "HTML", q: "12. What is a nested element?", opts: ["A. Element inside another element", "B. A header", "C. A body tag", "D. None"], ans: 0 },
+      { cat: "HTML", q: "13. Which is an empty element?", opts: ["A. <br>", "B. <p>", "C. <div>", "D. <h1>"], ans: 0 },
+      { cat: "HTML", q: "14. The <div> element is used for:", opts: ["A. Listing items", "B. Linking pages", "C. Dividing page sections", "D. Adding images"], ans: 2 },
+      { cat: "HTML", q: "15. <span> is used for:", opts: ["A. Inline text formatting", "B. Creating new paragraphs", "C. Making tables", "D. Adding scripts"], ans: 0 },
+      { cat: "HTML", q: "16. Attributes provide:", opts: ["A. Extra information about elements", "B. Style only", "C. Text content", "D. Links only"], ans: 0 },
+      { cat: "HTML", q: "17. Which of these is an attribute?", opts: ["A. h1", "B. href", "C. div", "D. title"], ans: 1 },
+      { cat: "HTML", q: "18. The src attribute is used in:", opts: ["A. <img>", "B. <a>", "C. <p>", "D. <h1>"], ans: 0 },
+      { cat: "HTML", q: "19. The alt attribute gives:", opts: ["A. Text alignment", "B. Background color", "C. Alternative text for images", "D. None"], ans: 2 },
+      { cat: "HTML", q: "20. Attribute values are always enclosed in:", opts: ["A. Quotes", "B. Parentheses", "C. Brackets", "D. Nothing"], ans: 0 },
+      { cat: "HTML", q: "21. HTML has how many heading levels?", opts: ["A. 3", "B. 6", "C. 5", "D. 7"], ans: 1 },
+      { cat: "HTML", q: "22. The largest heading tag is:", opts: ["A. <h6>", "B. <h1>", "C. <header>", "D. <h2>"], ans: 1 },
+      { cat: "HTML", q: "23. The smallest heading tag is:", opts: ["A. <h6>", "B. <h5>", "C. <h4>", "D. <h3>"], ans: 0 },
+      { cat: "HTML", q: "24. Headings are used for:", opts: ["A. Titles and subtitles", "B. Paragraphs", "C. Lists", "D. Tables"], ans: 0 },
+      { cat: "HTML", q: "25. <h1> text is usually:", opts: ["A. Hidden", "B. Italic", "C. Bold and big", "D. None"], ans: 2 },
+      { cat: "HTML", q: "26. A table starts with:", opts: ["A. <table>", "B. <tab>", "C. <t>", "D. <tbody>"], ans: 0 },
+      { cat: "HTML", q: "27. Table rows are defined with:", opts: ["A. <td>", "B. <tr>", "C. <th>", "D. <row>"], ans: 1 },
+      { cat: "HTML", q: "28. Table data cells are created using:", opts: ["A. <table>", "B. <tr>", "C. <td>", "D. <data>"], ans: 2 },
+      { cat: "HTML", q: "29. Table headings are created using:", opts: ["A. <caption>", "B. <td>", "C. <tr>", "D. <th>"], ans: 3 },
+      { cat: "HTML", q: "30. Which tag adds a title to a table?", opts: ["A. <caption>", "B. <title>", "C. <thead>", "D. <header>"], ans: 0 },
+      { cat: "HTML", q: "31. Paragraph tag:", opts: ["A. <pg>", "B. <para>", "C. <text>", "D. <p>"], ans: 3 },
+      { cat: "HTML", q: "32. Line break tag:", opts: ["A. <break>", "B. <lb>", "C. <br>", "D. <newline>"], ans: 2 },
+      { cat: "HTML", q: "33. Paragraphs automatically add:", opts: ["A. Blank space", "B. Border", "C. Image", "D. Link"], ans: 0 },
+      { cat: "HTML", q: "34. Paragraph tag is a(n):", opts: ["A. Block-level element", "B. Inline element", "C. Empty tag", "D. None"], ans: 0 },
+      { cat: "HTML", q: "35. To separate text lines, use:", opts: ["A. <p>", "B. <br>", "C. <hr>", "D. <div>"], ans: 1 },
+      { cat: "HTML", q: "36. Bold text tag:", opts: ["A. <b>", "B. <strong>", "C. Both A and B", "D. <bold>"], ans: 2 },
+      { cat: "HTML", q: "37. Italic text tag:", opts: ["A. <i>", "B. <italic>", "C. <em>", "D. Both A and C"], ans: 3 },
+      { cat: "HTML", q: "38. Underlined text tag:", opts: ["A. <u>", "B. <underline>", "C. <ins>", "D. Both A and C"], ans: 3 },
+      { cat: "HTML", q: "39. Superscript tag:", opts: ["A. <sup>", "B. <sub>", "C. <up>", "D. <super>"], ans: 0 },
+      { cat: "HTML", q: "40. <mark> tag is used to:", opts: ["A. Highlight text", "B. Bold text", "C. Insert link", "D. Italic text"], ans: 0 },
+      { cat: "HTML", q: "41. Unordered list tag:", opts: ["A. <list>", "B. <ol>", "C. <li>", "D. <ul>"], ans: 3 },
+      { cat: "HTML", q: "42. Ordered list tag:", opts: ["A. <li>", "B. <ul>", "C. <ol>", "D. <order>"], ans: 2 },
+      { cat: "HTML", q: "43. List items are added with:", opts: ["A. <item>", "B. <li>", "C. <ol>", "D. <data>"], ans: 1 },
+      { cat: "HTML", q: "44. Unordered lists use:", opts: ["A. Bullets", "B. Numbers", "C. Letters", "D. Symbols only"], ans: 0 },
+      { cat: "HTML", q: "45. Ordered lists use:", opts: ["A. Numbers or letters", "B. Bullets", "C. Stars", "D. Arrows"], ans: 0 },
+      { cat: "HTML", q: "46. Link tag:", opts: ["A. <a>", "B. <link>", "C. <url>", "D. <href>"], ans: 0 },
+      { cat: "HTML", q: "47. The href attribute defines:", opts: ["A. Destination URL", "B. Text color", "C. Font size", "D. Background"], ans: 0 },
+      { cat: "HTML", q: "48. To open link in new tab:", opts: ["A. target=\"_self\"", "B. target=\"blank\"", "C. newtab=\"on\"", "D. None"], ans: 1 },
+      { cat: "HTML", q: "49. <a> is an:", opts: ["A. Table element", "B. Block element", "C. Inline element", "D. None"], ans: 2 },
+      { cat: "HTML", q: "50. A link text appears:", opts: ["A. Underlined and blue", "B. Italic", "C. Red", "D. Hidden"], ans: 0 },
+      { cat: "HTML", q: "51. Image tag:", opts: ["A. <pic>", "B. <image>", "C. <img>", "D. <src>"], ans: 2 },
+      { cat: "HTML", q: "52. src defines:", opts: ["A. Caption", "B. Image size", "C. Text style", "D. Image source"], ans: 3 },
+      { cat: "HTML", q: "53. alt defines:", opts: ["A. Alternative text", "B. Alignment", "C. Animation", "D. Anchor"], ans: 0 },
+      { cat: "HTML", q: "54. Image tag is:", opts: ["A. Table tag", "B. Container tag", "C. Empty tag", "D. Inline block"], ans: 2 },
+      { cat: "HTML", q: "55. To resize an image:", opts: ["A. Use width and height attributes", "B. Use <resize> tag", "C. Use <style> only", "D. Impossible"], ans: 0 },
+      { cat: "HTML", q: "56. <marquee> is used for:", opts: ["A. Moving text or images", "B. Making tables", "C. Creating forms", "D. Adding lists"], ans: 0 },
+      { cat: "HTML", q: "57. To scroll text upward:", opts: ["A. direction=\"down\"", "B. direction=\"up\"", "C. direction=\"left\"", "D. direction=\"right\""], ans: 1 },
+      { cat: "HTML", q: "58. To scroll text continuously:", opts: ["A. behavior=\"alternate\"", "B. behavior=\"slide\"", "C. behavior=\"scroll\"", "D. None"], ans: 2 },
+      { cat: "HTML", q: "59. To change scroll speed:", opts: ["A. scrollamount", "B. speed", "C. move", "D. rate"], ans: 0 },
+      { cat: "HTML", q: "60. Marquee is:", opts: ["A. Recommended", "B. Deprecated", "C. A CSS property", "D. A JavaScript library"], ans: 1 },
+      { cat: "HTML", q: "61. Form tag:", opts: ["A. <form>", "B. <forms>", "C. <input>", "D. <data>"], ans: 0 },
+      { cat: "HTML", q: "62. Input field tag:", opts: ["A. <submit>", "B. <textfield>", "C. <enter>", "D. <input>"], ans: 3 },
+      { cat: "HTML", q: "63. Button tag:", opts: ["A. <click>", "B. <submit>", "C. <button>", "D. <inputbutton>"], ans: 2 },
+      { cat: "HTML", q: "64. Dropdown list tag:", opts: ["A. <option>", "B. <select>", "C. <dropdown>", "D. <list>"], ans: 1 },
+      { cat: "HTML", q: "65. Checkbox type:", opts: ["A. <input type=\"checkbox\">", "B. <input type=\"radio\">", "C. <input type=\"check\">", "D. <box>"], ans: 0 },
+
+      // --- JavaScript (1 to 40) ---
+      { cat: "JavaScript", q: "1. What is JavaScript?", opts: ["A. A design language for advertisements", "B. A scripting language for web pages", "C. A browser software", "D. A CSS library"], ans: 1 },
+      { cat: "JavaScript", q: "2. What is JavaScript used with?", opts: ["A. HTML and CSS", "B. Photoshop", "C. Excel", "D. PowerPoint"], ans: 0 },
+      { cat: "JavaScript", q: "3. Where can JavaScript run?", opts: ["A. Only on a server", "B. On a server and in a browser", "C. In MS Word", "D. It cannot run anywhere"], ans: 1 },
+      { cat: "JavaScript", q: "4. Which HTML tag is used to include JavaScript?", opts: ["A. <java>", "B. <js>", "C. <script>", "D. <code>"], ans: 2 },
+      { cat: "JavaScript", q: "5. What is JavaScript mainly used for?", opts: ["A. Creating data", "B. Creating interactivity on web pages", "C. Designing images", "D. Making tables"], ans: 1 },
+      { cat: "JavaScript", q: "6. What type of language is JavaScript?", opts: ["A. Compiled language", "B. Interpreted language", "C. Binary language", "D. Visual language"], ans: 1 },
+      { cat: "JavaScript", q: "7. Is JavaScript case-sensitive?", opts: ["A. No", "B. Yes"], ans: 1 },
+      { cat: "JavaScript", q: "8. What does // mean in JavaScript?", opts: ["A. Starts a function", "B. Creates a single-line comment", "C. Ends a script", "D. Creates an array"], ans: 1 },
+      { cat: "JavaScript", q: "9. Which symbol ends a JavaScript statement?", opts: ["A. :", "B. ;", "C. ..", "D. No ending needed"], ans: 1 },
+      { cat: "JavaScript", q: "10. Can JavaScript run without HTML?", opts: ["A. Yes, using Node.js or console", "B. No"], ans: 0 },
+      { cat: "JavaScript", q: "11. What is a variable used for?", opts: ["A. To store a value or data", "B. To display text", "C. To create a slide", "D. To store an image"], ans: 0 },
+      { cat: "JavaScript", q: "12. Which keywords are used to declare variables?", opts: ["A. dim", "B. var, let, const", "C. define", "D. declare"], ans: 1 },
+      { cat: "JavaScript", q: "13. What does a \"string\" data type represent?", opts: ["A. Numbers", "B. Text or words", "C. True/False values", "D. Arrays"], ans: 1 },
+      { cat: "JavaScript", q: "14. What values can a Boolean have?", opts: ["A. Correct and incorrect", "B. 1 and 0", "C. True and False", "D. Yes and No"], ans: 2 },
+      { cat: "JavaScript", q: "15. Can a constant (const) value be changed?", opts: ["A. Yes", "B. No"], ans: 1 },
+      { cat: "JavaScript", q: "16. What is the if statement used for?", opts: ["A. Displaying text", "B. Checking a condition", "C. Creating an array", "D. Ending a program"], ans: 1 },
+      { cat: "JavaScript", q: "17. When is the else statement used?", opts: ["A. When the condition is false", "B. When the condition is true", "C. When ending a program"], ans: 0 },
+      { cat: "JavaScript", q: "18. What is a for loop used for?", opts: ["A. Creating tables", "B. Repeating a set of instructions", "C. Ending code", "D. Creating a variable"], ans: 1 },
+      { cat: "JavaScript", q: "19. What is the purpose of a switch statement?", opts: ["A. Showing images", "B. Choosing between multiple options", "C. Adding strings", "D. Generating random values"], ans: 1 },
+      { cat: "JavaScript", q: "20. What does break do inside a loop?", opts: ["A. Stops the loop", "B. Starts the loop", "C. Adds a value", "D. Deletes a value"], ans: 0 },
+      { cat: "JavaScript", q: "21. What is a function used for?", opts: ["A. To store variables", "B. To group reusable code", "C. To create HTML", "D. To build a website"], ans: 1 },
+      { cat: "JavaScript", q: "22. Which keyword defines a function?", opts: ["A. fun", "B. function", "C. def", "D. method"], ans: 1 },
+      { cat: "JavaScript", q: "23. Can a function return a value?", opts: ["A. Yes", "B. No"], ans: 0 },
+      { cat: "JavaScript", q: "24. What does \"calling a function\" mean?", opts: ["A. Creating it", "B. Executing it", "C. Deleting it"], ans: 1 },
+      { cat: "JavaScript", q: "25. What are parameters used for?", opts: ["A. Receiving values from outside the function", "B. Showing errors", "C. Ending the code"], ans: 0 },
+      { cat: "JavaScript", q: "26. What is an array used for?", opts: ["A. To store multiple values in one variable", "B. To show text", "C. To create a function"], ans: 0 },
+      { cat: "JavaScript", q: "27. What are square brackets [] used for?", opts: ["A. Creating an array", "B. Creating an object"], ans: 0 },
+      { cat: "JavaScript", q: "28. What symbols define a string?", opts: ["A. ' or \"", "B. {}", "C. []"], ans: 0 },
+      { cat: "JavaScript", q: "29. What is the starting index number in an array?", opts: ["A. 0", "B. 1", "C. 2"], ans: 0 },
+      { cat: "JavaScript", q: "30. What does .length return?", opts: ["A. The length of an array or string", "B. A new value"], ans: 0 },
+      { cat: "JavaScript", q: "31. What is the Date object used for?", opts: ["A. Handling dates and times", "B. Displaying text"], ans: 0 },
+      { cat: "JavaScript", q: "32. What does new Date() create?", opts: ["A. A new Date object", "B. A new variable"], ans: 0 },
+      { cat: "JavaScript", q: "33. What is the Math object used for?", opts: ["A. Performing mathematical operations", "B. Showing text"], ans: 0 },
+      { cat: "JavaScript", q: "34. What does Math.random() do?", opts: ["A. Generates a random number", "B. Adds numbers"], ans: 0 },
+      { cat: "JavaScript", q: "35. What is the result of Math.round(4.7)?", opts: ["A. 4", "B. 5"], ans: 1 },
+      { cat: "JavaScript", q: "36. What is the purpose of the Browser Object Model (BOM)?", opts: ["A. Allows JavaScript to interact with the browser", "B. Builds HTML pages"], ans: 0 },
+      { cat: "JavaScript", q: "37. What is the window object?", opts: ["A. The top-level object in the browser", "B. An HTML object"], ans: 0 },
+      { cat: "JavaScript", q: "38. What does the document object represent?", opts: ["A. The current HTML page", "B. The system time"], ans: 0 },
+      { cat: "JavaScript", q: "39. What does alert() do?", opts: ["A. Displays an alert dialog box", "B. Deletes data"], ans: 0 },
+      { cat: "JavaScript", q: "40. What does the navigator object provide?", opts: ["A. Information about the browser", "B. Image control"], ans: 0 },
+
+      // --- OOP True / False (1 to 10) ---
+      { cat: "OOP-TF", q: "១. OOP មានគោលគំនិតសំខាន់ ៤ គឺ Encapsulation, Inheritance, Polymorphism, Abstraction", opts: ["ត្រូវ (True)", "ខុស (False)"], ans: 0 },
+      { cat: "OOP-TF", q: "២. យើងអាចបង្កើត object ច្រើនៗពី class តែមួយបាន", opts: ["ត្រូវ (True)", "ខុស (False)"], ans: 0 },
+      { cat: "OOP-TF", q: "៣. Constructor ត្រូវបានហៅស្វ័យប្រវត្តនៅពេលបង្កើត Object ថ្មី", opts: ["ត្រូវ (True)", "ខុស (False)"], ans: 0 },
+      { cat: "OOP-TF", q: "៤. Encapsulation មានន័យថា ការការពារទិន្នន័យដោយ Access Modifier (private, public, protected)", opts: ["ត្រូវ (True)", "ខុស (False)"], ans: 0 },
+      { cat: "OOP-TF", q: "៥. Inheritance អនុញ្ញាតឲ្យ class ម្នាក់ទទួលលក្ខណៈពី class មួយទៀត", opts: ["ត្រូវ (True)", "ខុស (False)"], ans: 0 },
+      { cat: "OOP-TF", q: "៦. Polymorphism មានន័យថា class មិនអាចប្រើ function ដូចគ្នា ប៉ុន្តែឈ្មោះខុសគ្នាបានទេ", opts: ["ត្រូវ (True)", "ខុស (False)"], ans: 1 },
+      { cat: "OOP-TF", q: "៧. Abstraction មានន័យថា បង្ហាញព័ត៌មានទាំងអស់របស់ class", opts: ["ត្រូវ (True)", "ខុស (False)"], ans: 1 },
+      { cat: "OOP-TF", q: "៨. Class មិនអាចមាន attribute ច្រើនជាង 1 បានទេ", opts: ["ត្រូវ (True)", "ខុស (False)"], ans: 1 },
+      { cat: "OOP-TF", q: "៩. Inheritance មិនអាចប្រើក្នុង Python បានទេ", opts: ["ត្រូវ (True)", "ខុស (False)"], ans: 1 },
+      { cat: "OOP-TF", q: "១០. Object គឺជា \"blueprint\" សម្រាប់បង្កើត class", opts: ["ត្រូវ (True)", "ខុស (False)"], ans: 1 },
+
+      // --- OOP Multiple Choice (1 to 10) ---
+      { cat: "OOP-MCQ", q: "១. OOP តំណាងឲ្យអ្វី?", opts: ["ក. Object-Oriented Programming", "ខ. Old Operation Process", "គ. Ordered Output Program", "ឃ. Object Office Program"], ans: 0 },
+      { cat: "OOP-MCQ", q: "២. Class គឺជាអ្វី?", opts: ["ក. Data value", "ខ. គំរូ (Blueprint) សម្រាប់បង្កើត Object", "គ. Variable", "ឃ. Program"], ans: 1 },
+      { cat: "OOP-MCQ", q: "៣. Object គឺជាអ្វី?", opts: ["ក. Function", "ខ. Operator", "គ. Instance នៃ Class", "ឃ. Module"], ans: 2 },
+      { cat: "OOP-MCQ", q: "៤. Inheritance អនុញ្ញាតអ្វី?", opts: ["ក. Delete data", "ខ. Modify memory", "គ. Rewrite database", "ឃ. Class ទទួលលក្ខណៈពី class មួយទៀត"], ans: 3 },
+      { cat: "OOP-MCQ", q: "៥. Encapsulation មានន័យ?", opts: ["ក. ការការពារទិន្នន័យ", "ខ. ការសរសេរច្រើនជួរ", "គ. ការប្រើ UI", "ឃ. ការរក្សាទុក Database"], ans: 0 },
+      { cat: "OOP-MCQ", q: "៦. Abstraction មានន័យ?", opts: ["ក. បង្ហាញទិន្នន័យទាំងអស់", "ខ. លាក់ព័ត៌មានដែលមិនចាំបាច់", "គ. ពង្រីកមុខងារ", "ឃ. ការបង្កើត Module"], ans: 1 },
+      { cat: "OOP-MCQ", q: "៧. Polymorphism អាចអនុញ្ញាតអ្វី?", opts: ["ក. ឈ្មោះ method ត្រូវតែមួយ", "ខ. មិនអាច Override បាន", "គ. Method ដូចគ្នា ប៉ុន្តែអាកប្បកិរិយាខុសគ្នា", "ឃ. ការកែប្រែកូដ UI"], ans: 2 },
+      { cat: "OOP-MCQ", q: "៨. Constructor ត្រូវបានហៅពេលណា?", opts: ["ក. ពេលបិទ program", "ខ. ពេល delete object", "គ. ពេល inheritance", "ឃ. ពេលបង្កើត object ថ្មី"], ans: 3 },
+      { cat: "OOP-MCQ", q: "៩. Private attribute ប្រើសញ្ញាអ្វីក្នុង Python?", opts: ["ក. __ (double underscore)", "ខ. #", "គ. @@", "ឃ. %%"], ans: 0 },
+      { cat: "OOP-MCQ", q: "១០. Keyword \"self\" ក្នុង Python មានន័យអ្វី?", opts: ["ក. Module", "ខ. តំណាងឲ្យ Object បច្ចុប្បន្ន", "គ. Class", "ឃ. Library"], ans: 1 }
+    ];
+
+    let currentFilter = 'all';
+    let userAnswers = {};
+    let isEvaluated = false;
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById('quizContainer');
+      container.innerHTML = '';
+
+      questions.forEach((q, idx) => {
+        const card = document.createElement('div');
+        card.className = `card ${currentFilter !== 'all' && q.cat !== currentFilter ? 'hidden' : ''}`;
+        card.dataset.category = q.cat;
+        card.id = `q-${idx}`;
+
+        const selectedOpt = userAnswers[idx];
+
+        let optionsHtml = '';
+        q.opts.forEach((opt, optIdx) => {
+          let btnClass = 'option-btn';
+
+          if (isEvaluated) {
+            if (optIdx === q.ans) {
+              btnClass += ' correct';
+            } else if (selectedOpt === optIdx) {
+              btnClass += ' incorrect';
+            }
+          } else {
+            if (selectedOpt === optIdx) {
+              btnClass += ' selected';
+            }
+          }
+
+          optionsHtml += `
+            <button 
+              class="${btnClass}" 
+              onclick="selectAnswer(${idx}, ${optIdx})">
+              ${escapeHtml(opt)}
+            </button>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="card-meta">
+            <span>${q.cat}</span>
+            <span>Question ${idx + 1} of ${questions.length}</span>
+          </div>
+          <div class="card-title">${escapeHtml(q.q)}</div>
+          <div class="options">${optionsHtml}</div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      updateProgressBar();
+    }
+
+    function selectAnswer(qIdx, optIdx) {
+      userAnswers[qIdx] = optIdx;
+      renderQuestions();
+    }
+
+    function updateProgressBar() {
+      const totalAnswered = Object.keys(userAnswers).length;
+      document.getElementById('scoreDisplay').textContent = 
+        `Progress: ${totalAnswered} / ${questions.length} answered`;
+    }
+
+    function submitQuiz() {
+      isEvaluated = true;
+      let correct = 0;
+      const total = questions.length;
+      const answered = Object.keys(userAnswers).length;
+      const unanswered = total - answered;
+
+      questions.forEach((q, idx) => {
+        if (userAnswers[idx] === q.ans) {
+          correct++;
+        }
+      });
+
+      const pct = Math.round((correct / total) * 100);
+
+      document.getElementById('mTotal').textContent = total;
+      document.getElementById('mAnswered').textContent = answered;
+      document.getElementById('mUnanswered').textContent = unanswered;
+      document.getElementById('mCorrect').textContent = `${correct} / ${total}`;
+      document.getElementById('mScore').textContent = `${pct}%`;
+
+      document.getElementById('resultModal').classList.remove('hidden');
+      renderQuestions();
+    }
+
+    function showAllAnswers() {
+      isEvaluated = true;
+      renderQuestions();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeModal() {
+      document.getElementById('resultModal').classList.add('hidden');
+    }
+
+    function setCategory(cat, btn) {
+      currentFilter = cat;
+      document.querySelectorAll('.filters .btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const quizContainer = document.getElementById('quizContainer');
+      const jsLab = document.getElementById('jsLabSection');
+      const oopCode = document.getElementById('oopCodeSection');
+
+      if (cat === 'JS-Practice') {
+        quizContainer.classList.add('hidden');
+        jsLab.classList.remove('hidden');
+        oopCode.classList.add('hidden');
+        return;
+      }
+
+      if (cat === 'OOP-Code') {
+        quizContainer.classList.add('hidden');
+        jsLab.classList.add('hidden');
+        oopCode.classList.remove('hidden');
+        return;
+      }
+
+      quizContainer.classList.remove('hidden');
+      jsLab.classList.add('hidden');
+      oopCode.classList.add('hidden');
+
+      document.querySelectorAll('#quizContainer .card').forEach(card => {
+        if (cat === 'all' || card.dataset.category === cat) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    function resetQuiz() {
+      userAnswers = {};
+      isEvaluated = false;
+      renderQuestions();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- JavaScript Worksheet Practice functions ---
+    function calculateSelectedCourses() {
+      let sum = 0;
+      const obj = document.getElementsByName("myCourseChoice");
+      for (let i = 0; i < obj.length; i++) {
+        if (!obj[i].checked) continue;
+        sum += parseFloat(obj[i].value);
+      }
+      document.getElementById('calcResult').textContent = "Total Price is: " + sum + "$";
+      alert("Total Price is: " + sum + "$");
+    }
+
+    function generateTable() {
+      const container = document.getElementById('multTableContainer');
+      let html = '<table class="mult-table"><tbody>';
+      for (let i = 1; i <= 10; i++) {
+        html += '<tr>';
+        for (let j = 1; j <= 10; j++) {
+          html += `<td>${i * j}</td>`;
+        }
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    renderQuestions();
+  </script>
+</body>
+</html>
