@@ -49,9 +49,6 @@
       border: 1px solid var(--border);
       box-shadow: 0 2px 6px rgba(0,0,0,0.06);
       margin-bottom: 24px;
-      position: sticky;
-      top: 16px;
-      z-index: 10;
     }
 
     .header-top {
@@ -138,6 +135,30 @@
     }
     .btn-reset:hover {
       background: #dc2626;
+    }
+
+    .scroll-top {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+      transition: background 0.15s ease-in-out, transform 0.15s ease-in-out;
+      z-index: 10;
+    }
+
+    .scroll-top:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
     }
 
     .question-list {
@@ -643,6 +664,8 @@ document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/table&gt;
     </div>
   </div>
 
+  <button id="scrollTopButton" class="scroll-top hidden" type="button" aria-label="Scroll to top" title="Scroll to top">↑</button>
+
   <!-- Result Modal -->
   <div id="resultModal" class="modal-backdrop hidden">
     <div class="modal">
@@ -973,6 +996,16 @@ document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/table&gt;
       html += '</tbody></table>';
       container.innerHTML = html;
     }
+
+    const scrollTopButton = document.getElementById('scrollTopButton');
+
+    window.addEventListener('scroll', () => {
+      scrollTopButton.classList.toggle('hidden', window.scrollY < 300);
+    });
+
+    scrollTopButton.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
     renderQuestions();
   </script>
