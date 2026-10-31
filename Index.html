@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Full Web & OOP Master Quiz</title>
+  <title>Full Web, OOP & ASP.NET Master Quiz</title>
   <style>
     :root {
       --bg: #f8fafc;
@@ -49,6 +49,7 @@
       border: 1px solid var(--border);
       box-shadow: 0 2px 6px rgba(0,0,0,0.06);
       margin-bottom: 24px;
+      position: static;
     }
 
     .header-top {
@@ -135,30 +136,6 @@
     }
     .btn-reset:hover {
       background: #dc2626;
-    }
-
-    .scroll-top {
-      position: fixed;
-      right: 24px;
-      bottom: 24px;
-      width: 44px;
-      height: 44px;
-      border: 0;
-      border-radius: 50%;
-      background: var(--primary);
-      color: #fff;
-      font-size: 1.25rem;
-      font-weight: 700;
-      line-height: 1;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
-      transition: background 0.15s ease-in-out, transform 0.15s ease-in-out;
-      z-index: 10;
-    }
-
-    .scroll-top:hover {
-      background: var(--primary-hover);
-      transform: translateY(-2px);
     }
 
     .question-list {
@@ -258,7 +235,7 @@
       padding: 5px;
     }
 
-    /* Syntax Highlighting Container & Colors */
+    /* Code Container & Highlights */
     .code-container {
       position: relative;
       background: var(--code-bg);
@@ -291,17 +268,51 @@
       tab-size: 4;
     }
 
-    /* Tokens */
-    .syn-tag { color: #f43f5e; font-weight: 600; }        /* HTML Tag (<tag>) */
-    .syn-attr { color: #38bdf8; }                         /* HTML Attribute */
-    .syn-str { color: #a3e635; }                          /* Strings ("...") */
-    .syn-kw { color: #c084fc; font-weight: 600; }         /* Keywords (class, public, var, let) */
-    .syn-fn { color: #60a5fa; }                           /* Function / Method names */
-    .syn-type { color: #38bdf8; }                         /* Data Types (int, String, double) */
-    .syn-com { color: #94a3b8; font-style: italic; }      /* Comments (// ...) */
-    .syn-num { color: #fb923c; }                          /* Numbers */
-    .syn-ann { color: #fbbf24; }                          /* Annotations (@Override) */
-    .syn-op { color: #e2e8f0; }                           /* Operators */
+    .syn-tag { color: #f43f5e; font-weight: 600; }
+    .syn-attr { color: #38bdf8; }
+    .syn-str { color: #a3e635; }
+    .syn-kw { color: #c084fc; font-weight: 600; }
+    .syn-fn { color: #60a5fa; }
+    .syn-type { color: #38bdf8; }
+    .syn-com { color: #94a3b8; font-style: italic; }
+    .syn-num { color: #fb923c; }
+    .syn-ann { color: #fbbf24; }
+
+    /* Floating Scroll To Top Button */
+    #scrollToTopBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: all 0.25s ease-in-out;
+      z-index: 99;
+    }
+
+    #scrollToTopBtn.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    #scrollToTopBtn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
+    }
 
     .hidden {
       display: none !important;
@@ -356,18 +367,20 @@
   <div class="container">
     <header>
       <div class="header-top">
-        <h1>Worksheet & OOP Master Quiz</h1>
-        <div class="score-badge" id="scoreDisplay">Progress: 0 / 125 answered</div>
+        <h1>Web, OOP & ASP.NET Master Quiz</h1>
+        <div class="score-badge" id="scoreDisplay">Progress: 0 / 130 answered</div>
       </div>
       <div class="toolbar">
         <div class="filters">
-          <button class="btn active" data-filter="all" onclick="setCategory('all', this)">All (125)</button>
+          <button class="btn active" data-filter="all" onclick="setCategory('all', this)">All (130)</button>
           <button class="btn" data-filter="HTML" onclick="setCategory('HTML', this)">HTML (65)</button>
           <button class="btn" data-filter="JavaScript" onclick="setCategory('JavaScript', this)">JavaScript (40)</button>
           <button class="btn" data-filter="JS-Practice" onclick="setCategory('JS-Practice', this)">JS Lab</button>
           <button class="btn" data-filter="OOP-TF" onclick="setCategory('OOP-TF', this)">OOP T/F (10)</button>
           <button class="btn" data-filter="OOP-MCQ" onclick="setCategory('OOP-MCQ', this)">OOP MCQ (10)</button>
           <button class="btn" data-filter="OOP-Code" onclick="setCategory('OOP-Code', this)">OOP Java Code</button>
+          <button class="btn" data-filter="ASP-NET" onclick="setCategory('ASP-NET', this)">ASP.NET Controls (5)</button>
+          <button class="btn" data-filter="ASP-NET-Code" onclick="setCategory('ASP-NET-Code', this)">ASP.NET & MySQL</button>
         </div>
         <div class="actions">
           <button class="btn btn-submit" onclick="submitQuiz()">Submit Quiz</button>
@@ -481,7 +494,7 @@ document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/table&gt;
         </ul>
       </div>
 
-      <!-- Theory 3 with syntax color -->
+      <!-- Theory 3 -->
       <div class="card">
         <div class="card-meta"><span>OOP Theory</span><span>សំណួរទ្រឹស្ដី ៣</span></div>
         <div class="card-title">៣. ដូចម្តេចដែលហៅថា Class? ចូរប្រាប់ពីការបង្កើត Class និងលើកជាឧទាហរណ៍ (Java)?</div>
@@ -513,7 +526,7 @@ document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/table&gt;
         </div>
       </div>
 
-      <!-- Full Java Implementation with syntax color -->
+      <!-- Full Java Implementation -->
       <div class="card">
         <div class="card-meta"><span>Java Complete Implementation</span><span>Class Hierarchy Code</span></div>
         <div class="card-title">Full Java Code (Person, Employee, Student, Lecturer, Subject & Main)</div>
@@ -662,16 +675,128 @@ document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/table&gt;
         </div>
       </div>
     </div>
+
+    <!-- ASP.NET Concepts & MySQL CRUD Section -->
+    <div id="aspNetSection" class="hidden" style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px;">
+      
+      <!-- Definitions Card -->
+      <div class="card">
+        <div class="card-meta"><span>ASP.NET Web Forms</span><span>និយមន័យ (Definitions)</span></div>
+        <div class="card-title">ASP.NET Core Server Concepts</div>
+        <ul style="margin-left: 20px; display: flex; flex-direction: column; gap: 10px;">
+          <li><strong>A). ASP.Net File Upload:</strong> គឺជា Server Control មួយនៅក្នុង ASP.NET ដែលអនុញ្ញាតឱ្យ User អាចជ្រើសរើសឯកសារ (Files) ពីម៉ាស៊ីន Client (ដូចជា រូបភាព, PDF, Documents) រួច Upload ឬបញ្ជូនទៅរក្សាទុកនៅលើ Web Server[cite: 18]។</li>
+          <li><strong>B). ASP.Net Download file:</strong> គឺជាយន្តការ ឬដំណើរការនៃការទាញយកទិន្នន័យ/ឯកសារពី Web Server មកកាន់ម៉ាស៊ីន Client វិញ ដោយកំណត់ HTTP Headers (Content-Disposition, Content-Type) និងបញ្ជូន Binary Stream មក Browser[cite: 18]។</li>
+          <li><strong>C). ASP.Net Cookies:</strong> គឺជា Text File តូចៗដែល Server បញ្ជាឱ្យរក្សាទុកនៅលើ Client Web Browser សម្រាប់ផ្ទុកទិន្នន័យចាំបាច់មួយចំនួន (ដូចជា User Preferences, State) ហើយត្រូវបានបញ្ជូនទៅកាន់ Server វិញរាល់ពេលមាន HTTP Request[cite: 18]។</li>
+          <li><strong>D). ASP.Net Session:</strong> គឺជាយន្តការគ្រប់គ្រងទិន្នន័យ (State Management) នៅលើ Web Server សម្រាប់រក្សាទុកព័ត៌មានជាក់លាក់របស់ User ម្នាក់ៗក្នុងកំឡុងពេលកំពុងចូលប្រើប្រាស់គេហទំព័រ (User Session)[cite: 18]។</li>
+        </ul>
+      </div>
+
+      <!-- Full C# MySQL CRUD Implementation -->
+      <div class="card">
+        <div class="card-meta"><span>ASP.NET C# with MySQL</span><span>Class DbHelper CRUD</span></div>
+        <div class="card-title">C# MySQL Database Operations on Tbl_User(id, name, sex)</div>
+        
+        <div class="code-container">
+          <div class="code-header">C# MySQL DbHelper.cs</div>
+          <pre><code><span class="syn-kw">using</span> System;
+<span class="syn-kw">using</span> System.Configuration;
+<span class="syn-kw">using</span> MySql.Data.MySqlClient;
+
+<span class="syn-kw">public class</span> <span class="syn-type">DbHelper</span>
+{
+    <span class="syn-com">// e). Database Connection Helper</span>
+    <span class="syn-kw">private</span> <span class="syn-type">MySqlConnection</span> <span class="syn-fn">GetConnection</span>()
+    {
+        <span class="syn-type">string</span> connStr = <span class="syn-type">ConfigurationManager</span>.ConnectionStrings[<span class="syn-str">"MySqlConnectionString"</span>].ConnectionString;
+        <span class="syn-kw">return new</span> <span class="syn-type">MySqlConnection</span>(connStr);
+    }
+
+    <span class="syn-com">// f). Add record to Tbl_User(id, name, sex)</span>
+    <span class="syn-kw">public void</span> <span class="syn-fn">AddRecord</span>(<span class="syn-type">int</span> id, <span class="syn-type">string</span> name, <span class="syn-type">string</span> sex)
+    {
+        <span class="syn-kw">using</span> (<span class="syn-type">MySqlConnection</span> conn = <span class="syn-fn">GetConnection</span>())
+        {
+            conn.<span class="syn-fn">Open</span>();
+            <span class="syn-type">string</span> query = <span class="syn-str">"INSERT INTO Tbl_User (id, name, sex) VALUES (@id, @name, @sex)"</span>;
+            <span class="syn-kw">using</span> (<span class="syn-type">MySqlCommand</span> cmd = <span class="syn-kw">new</span> <span class="syn-type">MySqlCommand</span>(query, conn))
+            {
+                cmd.Parameters.<span class="syn-fn">AddWithValue</span>(<span class="syn-str">"@id"</span>, id);
+                cmd.Parameters.<span class="syn-fn">AddWithValue</span>(<span class="syn-str">"@name"</span>, name);
+                cmd.Parameters.<span class="syn-fn">AddWithValue</span>(<span class="syn-str">"@sex"</span>, sex);
+                cmd.<span class="syn-fn">ExecuteNonQuery</span>();
+            }
+        }
+    }
+
+    <span class="syn-com">// g). Update record in Tbl_User</span>
+    <span class="syn-kw">public void</span> <span class="syn-fn">UpdateRecord</span>(<span class="syn-type">int</span> id, <span class="syn-type">string</span> name, <span class="syn-type">string</span> sex)
+    {
+        <span class="syn-kw">using</span> (<span class="syn-type">MySqlConnection</span> conn = <span class="syn-fn">GetConnection</span>())
+        {
+            conn.<span class="syn-fn">Open</span>();
+            <span class="syn-type">string</span> query = <span class="syn-str">"UPDATE Tbl_User SET name = @name, sex = @sex WHERE id = @id"</span>;
+            <span class="syn-kw">using</span> (<span class="syn-type">MySqlCommand</span> cmd = <span class="syn-kw">new</span> <span class="syn-type">MySqlCommand</span>(query, conn))
+            {
+                cmd.Parameters.<span class="syn-fn">AddWithValue</span>(<span class="syn-str">"@id"</span>, id);
+                cmd.Parameters.<span class="syn-fn">AddWithValue</span>(<span class="syn-str">"@name"</span>, name);
+                cmd.Parameters.<span class="syn-fn">AddWithValue</span>(<span class="syn-str">"@sex"</span>, sex);
+                cmd.<span class="syn-fn">ExecuteNonQuery</span>();
+            }
+        }
+    }
+
+    <span class="syn-com">// h). Delete record in Tbl_User</span>
+    <span class="syn-kw">public void</span> <span class="syn-fn">DeleteRecord</span>(<span class="syn-type">int</span> id)
+    {
+        <span class="syn-kw">using</span> (<span class="syn-type">MySqlConnection</span> conn = <span class="syn-fn">GetConnection</span>())
+        {
+            conn.<span class="syn-fn">Open</span>();
+            <span class="syn-type">string</span> query = <span class="syn-str">"DELETE FROM Tbl_User WHERE id = @id"</span>;
+            <span class="syn-kw">using</span> (<span class="syn-type">MySqlCommand</span> cmd = <span class="syn-kw">new</span> <span class="syn-type">MySqlCommand</span>(query, conn))
+            {
+                cmd.Parameters.<span class="syn-fn">AddWithValue</span>(<span class="syn-str">"@id"</span>, id);
+                cmd.<span class="syn-fn">ExecuteNonQuery</span>();
+            }
+        }
+    }
+
+    <span class="syn-com">// i). Search record in Tbl_User</span>
+    <span class="syn-kw">public void</span> <span class="syn-fn">SearchRecord</span>(<span class="syn-type">int</span> id)
+    {
+        <span class="syn-kw">using</span> (<span class="syn-type">MySqlConnection</span> conn = <span class="syn-fn">GetConnection</span>())
+        {
+            conn.<span class="syn-fn">Open</span>();
+            <span class="syn-type">string</span> query = <span class="syn-str">"SELECT id, name, sex FROM Tbl_User WHERE id = @id"</span>;
+            <span class="syn-kw">using</span> (<span class="syn-type">MySqlCommand</span> cmd = <span class="syn-kw">new</span> <span class="syn-type">MySqlCommand</span>(query, conn))
+            {
+                cmd.Parameters.<span class="syn-fn">AddWithValue</span>(<span class="syn-str">"@id"</span>, id);
+                <span class="syn-kw">using</span> (<span class="syn-type">MySqlDataReader</span> reader = cmd.<span class="syn-fn">ExecuteReader</span>())
+                {
+                    <span class="syn-kw">while</span> (reader.<span class="syn-fn">Read</span>())
+                    {
+                        <span class="syn-type">Console</span>.<span class="syn-fn">WriteLine</span>(<span class="syn-str">$"ID: {reader["id"]}, Name: {reader["name"]}, Sex: {reader["sex"]}"</span>);
+                    }
+                }
+            }
+        }
+    }
+}</code></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <button id="scrollTopButton" class="scroll-top hidden" type="button" aria-label="Scroll to top" title="Scroll to top">↑</button>
+  <!-- Floating Scroll Up Button -->
+  <button id="scrollToTopBtn" onclick="scrollToTop()" aria-label="Scroll to top">
+    &#8593;
+  </button>
 
   <!-- Result Modal -->
   <div id="resultModal" class="modal-backdrop hidden">
     <div class="modal">
       <h2>Quiz Results</h2>
       <div class="modal-stats">
-        <div>Total Questions: <span id="mTotal">125</span></div>
+        <div>Total Questions: <span id="mTotal">130</span></div>
         <div>Answered: <span id="mAnswered">0</span></div>
         <div>Unanswered: <span id="mUnanswered">0</span></div>
         <div>Correct Answers: <span id="mCorrect" style="color: var(--success-text)">0</span></div>
@@ -814,7 +939,14 @@ document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/table&gt;
       { cat: "OOP-MCQ", q: "៧. Polymorphism អាចអនុញ្ញាតអ្វី?", opts: ["ក. ឈ្មោះ method ត្រូវតែមួយ", "ខ. មិនអាច Override បាន", "គ. Method ដូចគ្នា ប៉ុន្តែអាកប្បកិរិយាខុសគ្នា", "ឃ. ការកែប្រែកូដ UI"], ans: 2 },
       { cat: "OOP-MCQ", q: "៨. Constructor ត្រូវបានហៅពេលណា?", opts: ["ក. ពេលបិទ program", "ខ. ពេល delete object", "គ. ពេល inheritance", "ឃ. ពេលបង្កើត object ថ្មី"], ans: 3 },
       { cat: "OOP-MCQ", q: "៩. Private attribute ប្រើសញ្ញាអ្វីក្នុង Python?", opts: ["ក. __ (double underscore)", "ខ. #", "គ. @@", "ឃ. %%"], ans: 0 },
-      { cat: "OOP-MCQ", q: "១០. Keyword \"self\" ក្នុង Python មានន័យអ្វី?", opts: ["ក. Module", "ខ. តំណាងឲ្យ Object បច្ចុប្បន្ន", "គ. Class", "ឃ. Library"], ans: 1 }
+      { cat: "OOP-MCQ", q: "១០. Keyword \"self\" ក្នុង Python មានន័យអ្វី?", opts: ["ក. Module", "ខ. តំណាងឲ្យ Object បច្ចុប្បន្ន", "គ. Class", "ឃ. Library"], ans: 1 },
+
+      // --- ASP.NET Web Forms Controls Matching (1 to 5) ---
+      { cat: "ASP-NET", q: "A. Text box is:", opts: ["1. user can choose multiple choices", "2. used to allow the user to click on a button", "3. used to showcase a list of items", "4. items of which the user can choose one", "5. used to accept input from the user"], ans: 4 },
+      { cat: "ASP-NET", q: "B. List box is:", opts: ["1. user can choose multiple choices", "2. used to allow the user to click on a button", "3. used to showcase a list of items", "4. items of which the user can choose one", "5. used to accept input from the user"], ans: 2 },
+      { cat: "ASP-NET", q: "C. Radio button is:", opts: ["1. user can choose multiple choices", "2. used to allow the user to click on a button", "3. used to showcase a list of items", "4. items of which the user can choose one", "5. used to accept input from the user"], ans: 3 },
+      { cat: "ASP-NET", q: "D. Check box is:", opts: ["1. user can choose multiple choices", "2. used to allow the user to click on a button", "3. used to showcase a list of items", "4. items of which the user can choose one", "5. used to accept input from the user"], ans: 0 },
+      { cat: "ASP-NET", q: "E. Button is:", opts: ["1. user can choose multiple choices", "2. used to allow the user to click on a button", "3. used to showcase a list of items", "4. items of which the user can choose one", "5. used to accept input from the user"], ans: 1 }
     ];
 
     let currentFilter = 'all';
@@ -921,7 +1053,7 @@ document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/table&gt;
     function showAllAnswers() {
       isEvaluated = true;
       renderQuestions();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToTop();
     }
 
     function closeModal() {
@@ -936,11 +1068,13 @@ document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/table&gt;
       const quizContainer = document.getElementById('quizContainer');
       const jsLab = document.getElementById('jsLabSection');
       const oopCode = document.getElementById('oopCodeSection');
+      const aspNet = document.getElementById('aspNetSection');
 
       if (cat === 'JS-Practice') {
         quizContainer.classList.add('hidden');
         jsLab.classList.remove('hidden');
         oopCode.classList.add('hidden');
+        aspNet.classList.add('hidden');
         return;
       }
 
@@ -948,12 +1082,22 @@ document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/table&gt;
         quizContainer.classList.add('hidden');
         jsLab.classList.add('hidden');
         oopCode.classList.remove('hidden');
+        aspNet.classList.add('hidden');
+        return;
+      }
+
+      if (cat === 'ASP-NET-Code') {
+        quizContainer.classList.add('hidden');
+        jsLab.classList.add('hidden');
+        oopCode.classList.add('hidden');
+        aspNet.classList.remove('hidden');
         return;
       }
 
       quizContainer.classList.remove('hidden');
       jsLab.classList.add('hidden');
       oopCode.classList.add('hidden');
+      aspNet.classList.add('hidden');
 
       document.querySelectorAll('#quizContainer .card').forEach(card => {
         if (cat === 'all' || card.dataset.category === cat) {
@@ -968,10 +1112,23 @@ document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/table&gt;
       userAnswers = {};
       isEvaluated = false;
       renderQuestions();
+      scrollToTop();
+    }
+
+    function scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // --- JavaScript Worksheet Practice functions ---
+    const scrollBtn = document.getElementById('scrollToTopBtn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollBtn.classList.add('show');
+      } else {
+        scrollBtn.classList.remove('show');
+      }
+    });
+
+    // --- JavaScript Practice Lab functions ---
     function calculateSelectedCourses() {
       let sum = 0;
       const obj = document.getElementsByName("myCourseChoice");
@@ -996,16 +1153,6 @@ document.<span class="syn-fn">write</span>(<span class="syn-str">"&lt;/table&gt;
       html += '</tbody></table>';
       container.innerHTML = html;
     }
-
-    const scrollTopButton = document.getElementById('scrollTopButton');
-
-    window.addEventListener('scroll', () => {
-      scrollTopButton.classList.toggle('hidden', window.scrollY < 300);
-    });
-
-    scrollTopButton.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
 
     renderQuestions();
   </script>
